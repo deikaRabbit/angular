@@ -9,20 +9,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var dog_1 = require('./dog');
+var router_1 = require('@angular/router');
+var common_1 = require('@angular/common');
+var dog_service_1 = require('./dog-service');
 var DogDetailsComponent = (function () {
-    function DogDetailsComponent() {
+    function DogDetailsComponent(dogService, route, location) {
+        this.dogService = dogService;
+        this.route = route;
+        this.location = location;
     }
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', dog_1.Dog)
-    ], DogDetailsComponent.prototype, "dog", void 0);
+    DogDetailsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.forEach(function (params) {
+            var id = +params['id'];
+            _this.dogService.getDog(id).then(function (dog) { return _this.dog = dog; });
+        });
+    };
+    DogDetailsComponent.prototype.goBack = function () {
+        this.location.back();
+    };
     DogDetailsComponent = __decorate([
         core_1.Component({
+            moduleId: module.id,
             selector: 'my-dog-details',
-            template: "<div *ngIf=\"dog\">\n                   <h2>{{dog.name}} details:</h2>\n                   <div><label>Id: </label>{{dog.id}}</div>\n                   <div>\n                       <label>Name: </label>\n                       <input type=\"text\" [(ngModel)]=\"dog.name\" placeholder=\"name\">\n                  </div>\n              </div>"
+            template: "<div *ngIf=\"dog\">\n                   <h2>{{dog.name}} details:</h2>\n                   <div><label>Id: </label>{{dog.id}}</div>\n                   <div>\n                       <label>Name: </label>\n                       <input type=\"text\" [(ngModel)]=\"dog.name\" placeholder=\"name\">\n                  </div>\n                  <button (click)=\"goBack()\">Back</button>\n              </div>",
+            styleUrls: ['dog-details.component.css'],
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [dog_service_1.DogService, router_1.ActivatedRoute, common_1.Location])
     ], DogDetailsComponent);
     return DogDetailsComponent;
 }());

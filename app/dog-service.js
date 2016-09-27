@@ -21,6 +21,10 @@ var DogService = (function () {
         return new Promise(function (resolve) { return setTimeout(resolve, 2000); }) // delay 2 seconds
             .then(function () { return _this.getDogs(); });
     };
+    DogService.prototype.getDog = function (id) {
+        return this.getDogs()
+            .then(function (dogs) { return dogs.find(function (dog) { return dog.id === id; }); });
+    };
     DogService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])
