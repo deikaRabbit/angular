@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-
-export class Dog {
-    id: number,
-    name: string
-}
+import { Dog } from './dog';
 
 const DOGS: Dog[] = [
     {id:1, name:'Tony'},
@@ -23,13 +19,7 @@ const DOGS: Dog[] = [
                        <span class="badge">{{dog.id}}</span>{{dog.name}}
                    </li>
                </ul>
-               <div *ngIf="selectDog">
-                   <h2>{{selectDog.name}} details:</h2>
-                   <div><label>Id: </label>{{selectDog.id}}</div>
-                   <div>
-                       <label>Name: </label>
-                       <input type="text" [(ngModel)]="selectDog.name" placeholder="name">
-               </div>`,
+               <my-dog-details [dog]="selectDog"></my-dog-details>`,
     styles: [`
         .selected {
             background-color: #CFD8DC !important;
@@ -85,8 +75,8 @@ export class AppComponent {
     title = 'Tour of Dogs';
     dogs = DOGS;
     selectDog : Dog;
-    
+
     onSelect(dog: Dog): void {
        this.selectDog = dog;
-    }  
+    }
 }

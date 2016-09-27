@@ -3,18 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 
 import { AppComponent }   from './app.component';
+import { DogDetailsComponent } from './dog-details.component';
 
 @NgModule({
-    imports: [ 
+    imports: [
         BrowserModule,
         FormsModule
     ],
     declarations: [
-        AppComponent
+        AppComponent,
+        DogDetailsComponent,
     ],
     bootstrap: [
         AppComponent
     ]
 })
 export class AppModule { }
-
