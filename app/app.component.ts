@@ -1,12 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Dog } from './dog';
+import { DogService } from './dog-service';
 
-const DOGS: Dog[] = [
-    {id:1, name:'Tony'},
-    {id:2, name:'CC'},
-    {id:3, name:'PP'},
-    {id:4, name:'GG'}
-];
 
 @Component({
     selector: 'my-app',
@@ -68,13 +63,20 @@ const DOGS: Dog[] = [
             margin-right: .8em;
             border-radius: 4px 0 0 4px;
         }
-    `]
+    `],
+    providers: [DogService]
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
     title = 'Tour of Dogs';
-    dogs = DOGS;
+    dogs: Dog[];
     selectDog : Dog;
+
+    constructor(private dogService: DogService) { }
+
+    ngOnInit(): void {
+        this.dogService.getDogs().then(dogs => this.dogs = dogs);
+    };
 
     onSelect(dog: Dog): void {
        this.selectDog = dog;
