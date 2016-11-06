@@ -31,4 +31,21 @@ export class DogComponent implements OnInit {
     gotoDetail(): void {
         this.router.navigate(['/detail', this.selectDog.id]);
     }
+
+    add(name: string): void {
+        name = name.trim();
+        if (!name) { return; }
+            this.dogService.create(name).then(dog => {
+                this.dogs.push(dog);
+                this.selectDog = null;
+        });
+    }
+
+    delete(dog: Dog): void {
+        this.dogService.delete(dog.id).then(() => {
+            this.dogs = this.dogs.filter(d => d !== dog);
+            if (this.selectDog === dog)
+            { this.selectDog = null; }
+            });
+    }
 }

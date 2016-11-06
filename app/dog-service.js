@@ -9,12 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var mock_dog_1 = require('./mock-dog');
+var http_1 = require('@angular/http');
+require('rxjs/add/operator/toPromise');
 var DogService = (function () {
-    function DogService() {
+    function DogService(http) {
+        this.http = http;
+        this.dogsUrl = 'app/dogs';
+        this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     DogService.prototype.getDogs = function () {
-        return Promise.resolve(mock_dog_1.DOGS);
+        return this.http.get(this.dogsUrl)
+            .toPromise()
+            .then(function (response) { return response.json().data; })
+            .catch(this.handleError);
     };
     DogService.prototype.getDogsSlowly = function () {
         var _this = this;
@@ -25,9 +32,31 @@ var DogService = (function () {
         return this.getDogs()
             .then(function (dogs) { return dogs.find(function (dog) { return dog.id === id; }); });
     };
+    DogService.prototype.update = function (dog) {
+        var url = this.dogsUrl + "/" + dog.id;
+        return this.http.put(url, JSON.stringify(dog), { headers: this.headers }).toPromise()
+            .then(function () { return dog; }).catch(this.handleError);
+    };
+    DogService.prototype.create = function (name) {
+        return this.http
+            .post(this.dogsUrl, JSON.stringify({ name: name }), { headers: this.headers })
+            .toPromise()
+            .then(function (res) { return res.json().data; })
+            .catch(this.handleError);
+    };
+    DogService.prototype.delete = function (id) {
+        var url = this.dogsUrl + "/" + id;
+        return this.http.delete(url, { headers: this.headers }).toPromise()
+            .then(function () { return null; })
+            .catch(this.handleError);
+    };
+    DogService.prototype.handleError = function (error) {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    };
     DogService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [http_1.Http])
     ], DogService);
     return DogService;
 }());

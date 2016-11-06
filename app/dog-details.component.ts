@@ -15,6 +15,7 @@ import { Dog } from './dog';
                        <label>Name: </label>
                        <input type="text" [(ngModel)]="dog.name" placeholder="name">
                   </div>
+                  <button (click)="save()">Save</button>
                   <button (click)="goBack()">Back</button>
               </div>`,
     styleUrls: [ 'dog-details.component.css' ],
@@ -34,5 +35,9 @@ export class DogDetailsComponent implements OnInit {
 
     goBack(): void {
         this.location.back();
+    }
+
+    save(): void {
+      this.dogService.update(this.dog).then(() => this.goBack());
     }
 }

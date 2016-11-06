@@ -29,6 +29,26 @@ var DogComponent = (function () {
     DogComponent.prototype.gotoDetail = function () {
         this.router.navigate(['/detail', this.selectDog.id]);
     };
+    DogComponent.prototype.add = function (name) {
+        var _this = this;
+        name = name.trim();
+        if (!name) {
+            return;
+        }
+        this.dogService.create(name).then(function (dog) {
+            _this.dogs.push(dog);
+            _this.selectDog = null;
+        });
+    };
+    DogComponent.prototype.delete = function (dog) {
+        var _this = this;
+        this.dogService.delete(dog.id).then(function () {
+            _this.dogs = _this.dogs.filter(function (d) { return d !== dog; });
+            if (_this.selectDog === dog) {
+                _this.selectDog = null;
+            }
+        });
+    };
     DogComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
